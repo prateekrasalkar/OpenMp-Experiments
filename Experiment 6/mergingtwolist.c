@@ -9,7 +9,7 @@ int main() {
     int i = 0, j = 0, k = 0;
 
     // Merge two sorted arrays using two pointers
-    #pragma omp parallel while
+    #pragma omp parallel
     while (i < n && j < n) {
         if (arr1[i] < arr2[j]) {
             arr3[k++] = arr1[i++];
@@ -19,13 +19,13 @@ int main() {
     }
 
     // Copy remaining elements from arr1, if any
-    #pragma omp parallel while
+    #pragma omp parallel
     while (i < n) {
         arr3[k++] = arr1[i++];
     }
 
     // Copy remaining elements from arr2, if any
-    #pragma omp parallel while
+    #pragma omp parallel
     while (j < n) {
         arr3[k++] = arr2[j++];
     }
