@@ -1,40 +1,35 @@
-#include<stdio.h>
-#include<omp.h>
-#include<stdlib.h>
-void sequential(){
-long long num_terms = 100000000;
-       	 double *arr = (double *)malloc(num_terms * sizeof(double));
-    if (arr == NULL) {
-        printf("Memory allocation failed\n");
-         }
-        double start,end;
-        start = omp_get_wtime();
-        for(int i=0;i<num_terms;i++){
-                arr[i] = arr[i] + 10.098;
-        }
-        end = omp_get_wtime();
-        printf("Sequential Addition : %f\n\n",end-start);
-}
+#include <stdio.h>
+#include <omp.h>
 
-int main(){
-	sequential();
-	long long num_terms = 100000000;
-	double *arr = (double *)malloc(num_terms * sizeof(double));  
-    if (arr == NULL) {
-        printf("Memory allocation failed\n");
-         }
+int main() {
+    int vec[5] = {1, 2, 3, 4, 5};
+    int scalar = 10;
+    double start, end, serial_time, parallel_time;
 
-	double start,end;
-	start = omp_get_wtime();
-	#pragma omp parallel for
-	for(int i =0;i<num_terms;i++){
-	arr[i] = arr[i] + 10.098;
-	}
-	end = omp_get_wtime();
-	printf("Parallel Addition : %f\n\n",end-start);
+    // Serial version
+    start = omp_get_wtime();
+    for (int i = 0; i < 5; i++) {
+        vec[i] += scalar;
+    }
+    end = omp_get_wtime();
+    serial_time = end - start;
 
-	return 0;
-	
+    // Reset vector
+    int vec2[5] = {1, 2, 3, 4, 5};
 
+    // Parallel version
+    start = omp_get_wtime();
+    #pragma omp parallel for
+    for (int i = 0; i < 5; i++) {
+        vec2[i] += scalar;
+    }
+    end = omp_get_wtime();
+    parallel_time = end - start;
 
+    // Print speedup
+    printf("Serial Time   = %f sec\n", serial_time);
+    printf("Parallel Time = %f sec\n", parallel_time);
+    printf("Speedup       = %f\n", serial_time / parallel_time);
+
+    return 0;
 }
